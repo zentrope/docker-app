@@ -75,73 +75,73 @@
   [:pre (ppout data)])
 
 (defc table-view < rum/static
-  [{:keys [title desc columns]} children]
+  [{:keys [title desc columns rows]}]
   [:section
    [:h1 title]
    (when-not (zero? (count desc))
      [:p desc])
    [:table
-    [:thead
-     [:tr
-      (for [c columns]
-        (if (vector? c)
-          [:th {:key (first c) :class (second c)} (first c)]
-          [:th {:key c} c]))]]
-    [:tbody
-     children]]])
+    [:thead [:tr
+             (for [c columns]
+               (if (vector? c)
+                 [:th {:key (first c) :class (second c)} (first c)]
+                 [:th {:key c} c]))]]
+    [:tbody rows]]])
 
 (defc networks < rum/static
   [networks]
-  (table-view {:title "Networks"
-               :desc ""
-               :columns ["network id", "name", "driver", "scope"]}
-   (for [n networks]
-     [:tr {:key (:Id n)}
-      [:td (short-id (:Id n))]
-      [:td (:Name n)]
-      [:td (:Driver n)]
-      [:td (:Scope n)]])))
+  (table-view
+   {:title   "Networks"
+    :desc    ""
+    :columns ["network id", "name", "driver", "scope"]
+    :rows    (for [n networks]
+               [:tr {:key (:Id n)}
+                [:td (short-id (:Id n))]
+                [:td (:Name n)]
+                [:td (:Driver n)]
+                [:td (:Scope n)]])}))
 
 (defc images < rum/static
   [images]
-  (table-view {:title "Images"
-               :desc ""
-               :columns ["repo" "tag" "image id" "created" ["size" "right"]]}
-   (for [i (sort-by #(first (:RepoTags %)) images)]
-       (let [id (short-id (:Id i))
-             [repo tag] (repo-tag (first (:RepoTags i)))]
-        [:tr {:key id}
-         [:td repo]
-         [:td tag]
-         [:td id]
-         [:td (datef (:Created i))]
-         [:td.right (numf (:Size i))]]))))
+  (table-view
+   {:title   "Images"
+    :desc    ""
+    :columns ["repo" "tag" "image id" "created" ["size" "right"]]
+    :rows    (for [i (sort-by #(first (:RepoTags %)) images)]
+               (let [id         (short-id (:Id i))
+                     [repo tag] (repo-tag (first (:RepoTags i)))]
+                 [:tr {:key id}
+                  [:td repo]
+                  [:td tag]
+                  [:td id]
+                  [:td (datef (:Created i))]
+                  [:td.right (numf (:Size i))]]))}))
 
 (defc volumes < rum/static
   [vols]
   (table-view
-   {:title "Volumes"
-    :desc ""
-    :columns ["driver" "volume name"]}
-   (for [v vols]
-     [:tr {:key (:Name v)}
-      [:td (:Driver v)]
-      [:td (:Name v)]])))
+   {:title   "Volumes"
+    :desc    ""
+    :columns ["driver" "volume name"]
+    :rows    (for [v vols]
+               [:tr {:key (:Name v)}
+                [:td (:Driver v)]
+                [:td (:Name v)]])}))
 
 (defc containers < rum/static
   [containers]
   (table-view
-   {:title "Containers"
-    :desc "Removed the 'command' column to make this easier to read."
-    :columns ["container id" "image" "created" "status" "ports" "names"]}
-   (for [c containers]
-     [:tr {:key (:Id c)}
-      [:td (short-id (:Id c))]
-      [:td (:Image c)]
-      [:td (datef (:Created c))]
-      [:td (:Status c)]
-      [:td (vecf (mapv portf (:Ports c)))]
-      [:td (vecf (:Names c))]])))
+   {:title   "Containers"
+    :desc    "Removed the 'command' column to make this easier to read."
+    :columns ["container id" "image" "created" "status" "ports" "names"]
+    :rows    (for [c containers]
+               [:tr {:key (:Id c)}
+                [:td (short-id (:Id c))]
+                [:td (:Image c)]
+                [:td (datef (:Created c))]
+                [:td (:Status c)]
+                [:td (vecf (mapv portf (:Ports c)))]
+                [:td (vecf (:Names c))]])}))
 
 (defc rootui < rum/static
   [state ch]
