@@ -1,0 +1,57 @@
+html, body {
+  font-family: helvetica;
+  margin: 0;
+  padding: 0;
+}
+
+section#Content {
+  margin: auto;
+  margin-top: 30px;
+  margin-left: 60px;
+  margin-right: 60px;
+  padding-bottom: 50px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 13pt;
+}
+
+thead tr {
+  border-bottom: 3px solid black;
+}
+
+thead tr th {
+  padding: 4px;
+  text-align: left;
+  font-size: 11pt;
+}
+
+tbody tr {
+
+  border-bottom: 1px solid silver;
+}
+
+tbody tr td {
+  padding: 4px;
+  font-size: 11pt;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100px;
+  overflow: hidden;
+}
+
+.right {
+  text-align: right;
+}
+
+h1 {
+  font-size: 14pt;
+  margin-top: 26pt;
+  margin-bottom: 13pt;
+}
+
+p {
+  font-size: 11pt;
+}
