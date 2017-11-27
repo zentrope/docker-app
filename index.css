@@ -55,3 +55,36 @@ h1 {
 p {
   font-size: 11pt;
 }
+
+.KeyValueCollection {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.KeyValueCollection .KeyValueItem {
+  width: 250px;
+
+  display: flex;
+  margin: 2px;
+}
+
+.KeyValueCollection .KeyValueItem .Key {
+  font-size: 10pt;
+  background-color: #e6e6e6;
+  width: 100px;
+  padding: 4px;
+  border: 1px solid silver;
+  text-align: right;
+}
+
+.KeyValueCollection .KeyValueItem .Value {
+  font-weight: bold;
+  font-size: 10pt;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 150px;
+  border: 1px solid silver;
+  border-left: none;
+  padding: 4px;
+}

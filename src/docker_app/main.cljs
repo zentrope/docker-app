@@ -74,6 +74,16 @@
   [data]
   [:pre (ppout data)])
 
+(defc key-value-view < rum/static
+  [{:keys [title data] :as config}]
+  [:section
+   [:h1 title]
+   [:div.KeyValueCollection
+    (for [k (sort (keys data))]
+      [:div.KeyValueItem {:key k}
+       [:div.Key (name k)]
+       [:div.Value (str (get data k))]])]])
+
 (defc table-view < rum/static
   [{:keys [title desc columns rows]}]
   [:section
@@ -150,8 +160,8 @@
    [:p "These tables represent the data you get from CLI docker
 commands using the Docker API."]
    ;;
-   [:h1 "Version"]
-   (dump (:version state))
+   (key-value-view {:title "Version"
+                    :data (:version state)})
    ;;
    (containers (sort-by :Id (:containers state)))
    (images (:images state))
