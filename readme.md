@@ -16,6 +16,7 @@ Windows, and I don't have a Linux instance to test with.
 * Docker Proxy utility
 * A command line that supports "open index.html" (i.e., at least
   MacOS).
+* git
 
 ## Method
 
@@ -89,13 +90,18 @@ commands translate.
 
 ## Build/Run the App
 
-Try:
+First, check out this repo:
 
+    $ git clone git@github.com:zentrope/docker-app.git
+
+then try:
+
+    $ cd docker-app
     $ make run
 
 to build and run the app. The make system will pull down some
 dependencies. As long as you're connected to the Internet, everything
-thing Just Work.
+should Just Work.
 
 ## Implementation Thing
 
