@@ -48,6 +48,10 @@
     (subs id 7 19)
     (subs id 0 12)))
 
+(defn repo-tag
+  [repotag]
+  (clojure.string/split repotag ":"))
+
 ;;-----------------------------------------------------------------------------
 
 (def url "http://localhost:2375")
@@ -66,36 +70,31 @@
 
 ;;-----------------------------------------------------------------------------
 
-(defn repo-tag
-  [repotag]
-  (clojure.string/split repotag ":"))
-
 (defc dump < rum/static
   [data]
   [:pre (ppout data)])
 
-(defc thead < rum/static
-  [heading desc names children]
+(defc table-view < rum/static
+  [{:keys [title desc columns]} children]
   [:section
-   [:h1 heading]
+   [:h1 title]
    (when-not (zero? (count desc))
      [:p desc])
    [:table
     [:thead
      [:tr
-      (for [n names]
-        (if (vector? n)
-          [:th {:key (first n) :class (second n)} (first n)]
-          [:th {:key n} n]))]]
+      (for [c columns]
+        (if (vector? c)
+          [:th {:key (first c) :class (second c)} (first c)]
+          [:th {:key c} c]))]]
     [:tbody
      children]]])
 
 (defc networks < rum/static
   [networks]
-  (thead
-   "Networks"
-   ""
-   ["network id", "name", "driver", "scope"]
+  (table-view {:title "Networks"
+               :desc ""
+               :columns ["network id", "name", "driver", "scope"]}
    (for [n networks]
      [:tr {:key (:Id n)}
       [:td (short-id (:Id n))]
@@ -105,10 +104,9 @@
 
 (defc images < rum/static
   [images]
-  (thead
-   "Images"
-   ""
-   ["repo" "tag" "image id" "created" ["size" "right"]]
+  (table-view {:title "Images"
+               :desc ""
+               :columns ["repo" "tag" "image id" "created" ["size" "right"]]}
    (for [i (sort-by #(first (:RepoTags %)) images)]
        (let [id (short-id (:Id i))
              [repo tag] (repo-tag (first (:RepoTags i)))]
@@ -121,10 +119,10 @@
 
 (defc volumes < rum/static
   [vols]
-  (thead
-   "Volumes"
-   ""
-   ["driver" "volume name"]
+  (table-view
+   {:title "Volumes"
+    :desc ""
+    :columns ["driver" "volume name"]}
    (for [v vols]
      [:tr {:key (:Name v)}
       [:td (:Driver v)]
@@ -132,10 +130,10 @@
 
 (defc containers < rum/static
   [containers]
-  (thead
-   "Containers"
-   "Removed the 'command' column to make this easier to read."
-   ["container id" "image" "created" "status" "ports" "names"]
+  (table-view
+   {:title "Containers"
+    :desc "Removed the 'command' column to make this easier to read."
+    :columns ["container id" "image" "created" "status" "ports" "names"]}
    (for [c containers]
      [:tr {:key (:Id c)}
       [:td (short-id (:Id c))]
