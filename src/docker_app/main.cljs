@@ -227,7 +227,7 @@ commands using the Docker API."]
   [{:keys [event-stream state] :as app}]
   (when-let [vers (:api-version @state)]
     (fetch-stuff vers :set/images event-stream "/images/json")
-    (fetch-stuff vers :set/containers event-stream "/containers/json")
+    (fetch-stuff vers :set/containers event-stream "/containers/json?all=1")
     (fetch-stuff vers :set/networks event-stream "/networks")
     (fetch-stuff vers :set/volumes event-stream "/volumes")))
 
