@@ -1,9 +1,8 @@
 ##-----------------------------------------------------------------------------
-##
+## Docker App
 ##-----------------------------------------------------------------------------
 
 .DEFAULT_GOAL := help
-
 
 ##-----------------------------------------------------------------------------
 ## DEPENDENCIES
@@ -11,25 +10,30 @@
 
 .PHONEY: init
 
-CURL = curl -O --progress-bar
+CURL = curl -O -L --progress-bar
 
 MAVEN = http://repo1.maven.org/maven2
 CLOJARS = https://clojars.org/repo
 
 LIB = lib
 
+CLOJS =   $(LIB)/cljs.jar
 ASYNC =   $(LIB)/core.async-0.3.465.jar
 RUM =     $(LIB)/rum-0.10.8.jar
 REACT =   $(LIB)/react-15.6.2-0.jar
 RDOM =    $(LIB)/react-dom-15.6.2-0.jar
 SABLONO = $(LIB)/sablono-0.7.7.jar
 
+GET_CLOJS = https://github.com/clojure/clojurescript/releases/download/r1.9.473/cljs.jar
 GET_ASYNC = $(MAVEN)/org/clojure/core.async/0.3.465/core.async-0.3.465.jar
 GET_CLJS = $(MAVEN)/org/clojure/clojurescript/1.9.946/clojurescript-1.9.946.jar
 GET_RUM = $(CLOJARS)/rum/rum/0.10.8/rum-0.10.8.jar
 GET_REACT = $(CLOJARS)/cljsjs/react/15.6.2-0/react-15.6.2-0.jar
 GET_RDOM = $(CLOJARS)/cljsjs/react-dom/15.6.2-0/react-dom-15.6.2-0.jar
 GET_SABLONO = $(CLOJARS)/sablono/sablono/0.7.7/sablono-0.7.7.jar
+
+$(CLOJS):
+	@cd $(LIB) ; $(CURL) $(GET_CLOJS)
 
 $(SABLONO):
 	@cd $(LIB) ; $(CURL) $(GET_SABLONO)
@@ -49,14 +53,13 @@ $(ASYNC):
 lib:
 	@mkdir lib
 
-init: lib $(ASYNC) $(RUM)  ## Pull down 3rd party library dependencies.
+init: lib $(CLOJS) $(ASYNC) $(RUM)  ## Pull down 3rd party library dependencies.
 
 ##-----------------------------------------------------------------------------
 
-CLJS = ./bin/cljs.jar
 SRC = ./src
 
-CLASSPATH = $(CLJS):lib/*:src
+CLASSPATH = $(CLOJS):$(LIB)/*:$(SRC)
 CLOJURE = java -cp $(CLASSPATH) clojure.main
 
 TARGET = out
